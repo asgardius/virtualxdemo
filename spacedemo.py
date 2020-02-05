@@ -35,30 +35,34 @@ class Background(pygame.sprite.Sprite):
         self.velocity = [0, 0]
 class Player(pygame.sprite.Sprite):
     def __init__(self):
-        super().__init__()
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 12
+        self.y = 190
         self.image = pygame.image.load('ss.png')
         #self.image = pygame.Surface((32, 32))
         #self.image.fill(WHITE)
         #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
-        self.rect = pygame.Rect((12, 190), (108, 68))
+        self.rect = pygame.Rect(self.x,self.y,108, 68)
         self.velocity = [0, 0]
 
     def update(self):
         self.rect.move_ip(*self.velocity)
-class Css1(pygame.sprite.Sprite):
+class Css(pygame.sprite.Sprite):
     def __init__(self):
-        super().__init__()
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 400
+        self.y = 190
         self.image = pygame.image.load('ss.png')
         #self.image = pygame.Surface((32, 32))
         #self.image.fill(WHITE)
         #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
-        self.rect = pygame.Rect((400, 190), (108, 68))
+        self.rect = pygame.Rect(self.x,self.y,108, 68)
         self.velocity = [0, 0]
 
     def update(self):
         self.rect.move_ip(*self.velocity)
 player = Player()
-css1 = Css1()
+css1 = Css()
 background = Background()
 running = True
 live = True
@@ -86,6 +90,10 @@ while running:
     player.velocity[1] = 600 * dt * (ay - by)
     css1.velocity[0] = -600 * dt * bx
     css1.velocity[1] = -600 * dt * by
+    if pygame.sprite.collide_rect(player, css1):
+        live = False
+        pygame.mixer.music.stop()
+        csfx.play()
     if b0:
         pygame.mixer.music.stop()
     elif b1:
