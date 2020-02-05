@@ -52,7 +52,7 @@ class Css(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = 400
         self.y = 190
-        self.image = pygame.image.load('ss.png')
+        self.image = pygame.image.load('css.png')
         #self.image = pygame.Surface((32, 32))
         #self.image.fill(WHITE)
         #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
