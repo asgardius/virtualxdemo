@@ -18,6 +18,7 @@ FPS = 60
 BLACK = (0, 0, 0)
 #WHITE = (255, 255, 255)
 pygame.mixer.music.load('space.ogg')
+csfx = pygame.mixer.Sound('crash.ogg')
 pygame.mixer.music.play(-1)
 #sound = pygame.mixer.Sound(file='bmx.ogg')
 #raw_array = sound.get_raw()
@@ -60,6 +61,7 @@ player = Player()
 css1 = Css1()
 background = Background()
 running = True
+live = True
 #rect = pygame.Rect((0, 0), (32, 32))
 #image = pygame.Surface((32, 32))
 #image.fill(WHITE)
@@ -78,6 +80,8 @@ while running:
     by = joystick.get_axis(4)
     b0 = joystick.get_button(0)
     b1 = joystick.get_button(1)
+    b2 = joystick.get_button(2)
+    b3 = joystick.get_button(3)
     player.velocity[0] = 600 * dt * (ax - bx)
     player.velocity[1] = 600 * dt * (ay - by)
     css1.velocity[0] = -600 * dt * bx
@@ -86,11 +90,19 @@ while running:
         pygame.mixer.music.stop()
     elif b1:
         pygame.mixer.music.play(-1)
+    elif b2:
+        live = False
+        pygame.mixer.music.stop()
+        csfx.play()
+    elif b3:
+        live = True
+        pygame.mixer.music.play(-1)
     player.update()
     css1.update()
 
     screen.blit(background.image, background.rect)
-    screen.blit(player.image, player.rect)
+    if live:
+        screen.blit(player.image, player.rect)
     screen.blit(css1.image, css1.rect)
     rfps = font.render(str(int(clock.get_fps())), True, pygame.Color('white'))
     sysclock = font.render(str(datetime.datetime.utcnow()), True, pygame.Color('white'))
