@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.move_ip(*self.velocity)
-class P2(pygame.sprite.Sprite):
+class Css1(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load('ss.png')
@@ -57,7 +57,7 @@ class P2(pygame.sprite.Sprite):
     def update(self):
         self.rect.move_ip(*self.velocity)
 player = Player()
-p2 = P2()
+css1 = Css1()
 background = Background()
 running = True
 #rect = pygame.Rect((0, 0), (32, 32))
@@ -78,20 +78,20 @@ while running:
     by = joystick.get_axis(4)
     b0 = joystick.get_button(0)
     b1 = joystick.get_button(1)
-    player.velocity[0] = 600 * dt * ax
-    player.velocity[1] = 600 * dt * ay
-    p2.velocity[0] = 600 * dt * bx
-    p2.velocity[1] = 600 * dt * by
+    player.velocity[0] = 600 * dt * (ax - bx)
+    player.velocity[1] = 600 * dt * (ay - by)
+    css1.velocity[0] = -600 * dt * bx
+    css1.velocity[1] = -600 * dt * by
     if b0:
         pygame.mixer.music.stop()
     elif b1:
         pygame.mixer.music.play(-1)
     player.update()
-    p2.update()
+    css1.update()
 
     screen.blit(background.image, background.rect)
     screen.blit(player.image, player.rect)
-    screen.blit(p2.image, p2.rect)
+    screen.blit(css1.image, css1.rect)
     rfps = font.render(str(int(clock.get_fps())), True, pygame.Color('white'))
     sysclock = font.render(str(datetime.datetime.utcnow()), True, pygame.Color('white'))
     cpuarch = font.render(str(platform.machine()), True, pygame.Color('white'))
