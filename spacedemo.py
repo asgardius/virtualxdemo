@@ -94,6 +94,7 @@ while running:
         live = False
         pygame.mixer.music.stop()
         csfx.play()
+        player = Player()
     if b0:
         pygame.mixer.music.stop()
     elif b1:
@@ -111,7 +112,7 @@ while running:
     screen.blit(background.image, background.rect)
     if live:
         screen.blit(player.image, player.rect)
-    screen.blit(css1.image, css1.rect)
+        screen.blit(css1.image, css1.rect)
     rfps = font.render(str(int(clock.get_fps())), True, pygame.Color('white'))
     sysclock = font.render(str(datetime.datetime.utcnow()), True, pygame.Color('white'))
     cpuarch = font.render(str(platform.machine()), True, pygame.Color('white'))
