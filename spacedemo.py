@@ -47,7 +47,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.move_ip(*self.velocity)
-class Css(pygame.sprite.Sprite):
+class Css1(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.x = 400
@@ -61,8 +61,23 @@ class Css(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.move_ip(*self.velocity)
+class Css2(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 550
+        self.y = 400
+        self.image = pygame.image.load('css.png')
+        #self.image = pygame.Surface((32, 32))
+        #self.image.fill(WHITE)
+        #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
+        self.rect = pygame.Rect(self.x,self.y,108, 68)
+        self.velocity = [0, 0]
+
+    def update(self):
+        self.rect.move_ip(*self.velocity)
 player = Player()
-css1 = Css()
+css1 = Css1()
+css2 = Css2()
 background = Background()
 running = True
 live = True
@@ -90,7 +105,16 @@ while running:
     player.velocity[1] = 600 * dt * (ay - by)
     css1.velocity[0] = -600 * dt * bx
     css1.velocity[1] = -600 * dt * by
+    #css2.velocity[0] = -600 * dt * bx
+    #css2.velocity[1] = -600 * dt * by
+    css2.velocity = css1.velocity
+    
     if pygame.sprite.collide_rect(player, css1):
+        live = False
+        pygame.mixer.music.stop()
+        csfx.play()
+        player = Player()
+    elif pygame.sprite.collide_rect(player, css2):
         live = False
         pygame.mixer.music.stop()
         csfx.play()
@@ -108,11 +132,13 @@ while running:
         pygame.mixer.music.play(-1)
     player.update()
     css1.update()
+    css2.update()
 
     screen.blit(background.image, background.rect)
     if live:
         screen.blit(player.image, player.rect)
         screen.blit(css1.image, css1.rect)
+        screen.blit(css2.image, css2.rect)
     rfps = font.render(str(int(clock.get_fps())), True, pygame.Color('white'))
     sysclock = font.render(str(datetime.datetime.utcnow()), True, pygame.Color('white'))
     cpuarch = font.render(str(platform.machine()), True, pygame.Color('white'))
