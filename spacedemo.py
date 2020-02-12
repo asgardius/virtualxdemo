@@ -103,11 +103,41 @@ class Ast1(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.move_ip(*self.velocity)
+class Ast2(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 300
+        self.y = 100
+        self.image = pygame.image.load('asteroid.png')
+        #self.image = pygame.Surface((32, 32))
+        #self.image.fill(WHITE)
+        #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
+        self.rect = pygame.Rect(self.x,self.y,108, 78)
+        self.velocity = [0, 0]
+
+    def update(self):
+        self.rect.move_ip(*self.velocity)
+class Ast3(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 500
+        self.y = 150
+        self.image = pygame.image.load('asteroid.png')
+        #self.image = pygame.Surface((32, 32))
+        #self.image.fill(WHITE)
+        #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
+        self.rect = pygame.Rect(self.x,self.y,108, 78)
+        self.velocity = [0, 0]
+
+    def update(self):
+        self.rect.move_ip(*self.velocity)
 player = Player()
 css1 = Css1()
 css2 = Css2()
 sat1 = Sat1()
 ast1 = Ast1()
+ast2 = Ast2()
+ast3 = Ast3()
 background = Background()
 running = True
 live = True
@@ -139,6 +169,10 @@ while running:
     sat1.velocity = css1.velocity
     ast1.velocity[0] = -200 * dt * bx
     ast1.velocity[1] = -200 * dt * by
+    ast2.velocity[0] = -150 * dt * bx
+    ast2.velocity[1] = -150 * dt * by
+    ast3.velocity[0] = -120 * dt * bx
+    ast3.velocity[1] = -120 * dt * by
     
     if pygame.sprite.collide_rect(player, css1):
         live = False
@@ -149,6 +183,8 @@ while running:
         css2 = Css2()
         sat1 = Sat1()
         ast1 = Ast1()
+        ast2 = Ast2()
+        ast3 = Ast3()
     elif pygame.sprite.collide_rect(player, css2):
         live = False
         pygame.mixer.music.stop()
@@ -158,6 +194,8 @@ while running:
         css2 = Css2()
         sat1 = Sat1()
         ast1 = Ast1()
+        ast2 = Ast2()
+        ast3 = Ast3()
     elif pygame.sprite.collide_rect(player, sat1):
         live = False
         pygame.mixer.music.stop()
@@ -167,6 +205,8 @@ while running:
         css2 = Css2()
         sat1 = Sat1()
         ast1 = Ast1()
+        ast2 = Ast2()
+        ast3 = Ast3()
     if b0:
         pygame.mixer.music.stop()
     elif b1:
@@ -180,6 +220,8 @@ while running:
         css2 = Css2()
         sat1 = Sat1()
         ast1 = Ast1()
+        ast2 = Ast2()
+        ast3 = Ast3()
     elif b3:
         live = True
         pygame.mixer.music.play(-1)
@@ -188,9 +230,13 @@ while running:
     css2.update()
     sat1.update()
     ast1.update()
+    ast2.update()
+    ast3.update()
 
     screen.blit(background.image, background.rect)
     if live:
+        screen.blit(ast3.image, ast3.rect)
+        screen.blit(ast1.image, ast2.rect)
         screen.blit(ast1.image, ast1.rect)
         screen.blit(player.image, player.rect)
         screen.blit(css1.image, css1.rect)
