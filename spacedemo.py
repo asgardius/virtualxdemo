@@ -179,6 +179,7 @@ while running:
         css1 = Css1()
         css2 = Css2()
         sat1 = Sat1()
+        ast1 = Ast1()
     elif b3:
         live = True
         pygame.mixer.music.play(-1)
