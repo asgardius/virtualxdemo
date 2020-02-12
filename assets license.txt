@@ -2,4 +2,7 @@ space.ogg - Mid-Air Machine - Creative Commons Attribution-ShareAlike
 galaxy.png - NASA - Public Domain
 fish.ogv - Page Asgardius (Music By Mid-Air Machine) - Attribution-NonCommercial-ShareAlike
 ss.png - Pixabay - Pixabay License
+css.png - Pixabay - Pixabay License
 intro.ogv - Page Asgardius (Music By Mid-Air Machine) - Attribution-NonCommercial-ShareAlike
+sat.png - NASA - Public Domain
+asteroid.png - NASA - Public Domain

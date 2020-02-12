@@ -64,7 +64,7 @@ class Css1(pygame.sprite.Sprite):
 class Css2(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.x = 550
+        self.x = 500
         self.y = 400
         self.image = pygame.image.load('css.png')
         #self.image = pygame.Surface((32, 32))
@@ -75,9 +75,39 @@ class Css2(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.move_ip(*self.velocity)
+class Sat1(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 550
+        self.y = -100
+        self.image = pygame.image.load('sat.png')
+        #self.image = pygame.Surface((32, 32))
+        #self.image.fill(WHITE)
+        #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
+        self.rect = pygame.Rect(self.x,self.y,30, 22)
+        self.velocity = [0, 0]
+
+    def update(self):
+        self.rect.move_ip(*self.velocity)
+class Ast1(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 120
+        self.y = 200
+        self.image = pygame.image.load('asteroid.png')
+        #self.image = pygame.Surface((32, 32))
+        #self.image.fill(WHITE)
+        #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
+        self.rect = pygame.Rect(self.x,self.y,108, 78)
+        self.velocity = [0, 0]
+
+    def update(self):
+        self.rect.move_ip(*self.velocity)
 player = Player()
 css1 = Css1()
 css2 = Css2()
+sat1 = Sat1()
+ast1 = Ast1()
 background = Background()
 running = True
 live = True
@@ -105,20 +135,38 @@ while running:
     player.velocity[1] = 600 * dt * (ay - by)
     css1.velocity[0] = -600 * dt * bx
     css1.velocity[1] = -600 * dt * by
-    #css2.velocity[0] = -600 * dt * bx
-    #css2.velocity[1] = -600 * dt * by
     css2.velocity = css1.velocity
+    sat1.velocity = css1.velocity
+    ast1.velocity[0] = -200 * dt * bx
+    ast1.velocity[1] = -200 * dt * by
     
     if pygame.sprite.collide_rect(player, css1):
         live = False
         pygame.mixer.music.stop()
         csfx.play()
         player = Player()
+        css1 = Css1()
+        css2 = Css2()
+        sat1 = Sat1()
+        ast1 = Ast1()
     elif pygame.sprite.collide_rect(player, css2):
         live = False
         pygame.mixer.music.stop()
         csfx.play()
         player = Player()
+        css1 = Css1()
+        css2 = Css2()
+        sat1 = Sat1()
+        ast1 = Ast1()
+    elif pygame.sprite.collide_rect(player, sat1):
+        live = False
+        pygame.mixer.music.stop()
+        csfx.play()
+        player = Player()
+        css1 = Css1()
+        css2 = Css2()
+        sat1 = Sat1()
+        ast1 = Ast1()
     if b0:
         pygame.mixer.music.stop()
     elif b1:
@@ -127,18 +175,26 @@ while running:
         live = False
         pygame.mixer.music.stop()
         csfx.play()
+        player = Player()
+        css1 = Css1()
+        css2 = Css2()
+        sat1 = Sat1()
     elif b3:
         live = True
         pygame.mixer.music.play(-1)
     player.update()
     css1.update()
     css2.update()
+    sat1.update()
+    ast1.update()
 
     screen.blit(background.image, background.rect)
     if live:
+        screen.blit(ast1.image, ast1.rect)
         screen.blit(player.image, player.rect)
         screen.blit(css1.image, css1.rect)
         screen.blit(css2.image, css2.rect)
+        screen.blit(sat1.image, sat1.rect)
     rfps = font.render(str(int(clock.get_fps())), True, pygame.Color('white'))
     sysclock = font.render(str(datetime.datetime.utcnow()), True, pygame.Color('white'))
     cpuarch = font.render(str(platform.machine()), True, pygame.Color('white'))
