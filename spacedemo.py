@@ -10,7 +10,7 @@ import subprocess
 #output, error = process.communicate()
 pygame.init()
 pygame.joystick.init()
-screen = pygame.display.set_mode((512, 448))
+screen = pygame.display.set_mode((1024, 600))
 pygame.display.set_caption('Space - Virtualx Game Engine')
 font = pygame.font.Font(None, 30)
 clock = pygame.time.Clock()
@@ -89,6 +89,20 @@ class Sat1(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.move_ip(*self.velocity)
+class Goal(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 3000
+        self.y = -200
+        self.image = pygame.image.load('radio.png')
+        #self.image = pygame.Surface((32, 32))
+        #self.image.fill(WHITE)
+        #self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
+        self.rect = pygame.Rect(self.x,self.y,69, 120)
+        self.velocity = [0, 0]
+
+    def update(self):
+        self.rect.move_ip(*self.velocity)
 class Ast1(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -135,6 +149,7 @@ player = Player()
 css1 = Css1()
 css2 = Css2()
 sat1 = Sat1()
+goal = Goal()
 ast1 = Ast1()
 ast2 = Ast2()
 ast3 = Ast3()
@@ -167,6 +182,7 @@ while running:
     css1.velocity[1] = -600 * dt * by
     css2.velocity = css1.velocity
     sat1.velocity = css1.velocity
+    goal.velocity = css1.velocity
     ast1.velocity[0] = -200 * dt * bx
     ast1.velocity[1] = -200 * dt * by
     ast2.velocity[0] = -150 * dt * bx
@@ -182,6 +198,7 @@ while running:
         css1 = Css1()
         css2 = Css2()
         sat1 = Sat1()
+        goal = Goal()
         ast1 = Ast1()
         ast2 = Ast2()
         ast3 = Ast3()
@@ -193,6 +210,7 @@ while running:
         css1 = Css1()
         css2 = Css2()
         sat1 = Sat1()
+        goal = Goal()
         ast1 = Ast1()
         ast2 = Ast2()
         ast3 = Ast3()
@@ -204,6 +222,7 @@ while running:
         css1 = Css1()
         css2 = Css2()
         sat1 = Sat1()
+        goal = Goal()
         ast1 = Ast1()
         ast2 = Ast2()
         ast3 = Ast3()
@@ -219,6 +238,7 @@ while running:
         css1 = Css1()
         css2 = Css2()
         sat1 = Sat1()
+        goal = Goal()
         ast1 = Ast1()
         ast2 = Ast2()
         ast3 = Ast3()
@@ -229,6 +249,7 @@ while running:
     css1.update()
     css2.update()
     sat1.update()
+    goal.update()
     ast1.update()
     ast2.update()
     ast3.update()
@@ -242,6 +263,7 @@ while running:
         screen.blit(css1.image, css1.rect)
         screen.blit(css2.image, css2.rect)
         screen.blit(sat1.image, sat1.rect)
+        screen.blit(goal.image, goal.rect)
     rfps = font.render(str(int(clock.get_fps())), True, pygame.Color('white'))
     sysclock = font.render(str(datetime.datetime.utcnow()), True, pygame.Color('white'))
     cpuarch = font.render(str(platform.machine()), True, pygame.Color('white'))
