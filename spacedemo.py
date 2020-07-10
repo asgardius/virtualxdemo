@@ -19,6 +19,7 @@ BLACK = (0, 0, 0)
 #WHITE = (255, 255, 255)
 pygame.mixer.music.load('space.ogg')
 csfx = pygame.mixer.Sound('crash.ogg')
+lcfx = pygame.mixer.Sound('complete.ogg')
 pygame.mixer.music.play(-1)
 #sound = pygame.mixer.Sound(file='bmx.ogg')
 #raw_array = sound.get_raw()
@@ -167,14 +168,21 @@ while running:
         if event.type == pygame.QUIT:
             quit()
     joystick = pygame.joystick.Joystick(0)
+    #tested with ds4 controller on rpi, please use joysticktest script to test your controller
     joystick.init()
+    #ax and ay are for left stick
     ax = joystick.get_axis(0)
     ay = joystick.get_axis(1)
+    #bx and by are for right stick
     bx = joystick.get_axis(3)
     by = joystick.get_axis(4)
+    #b0 is for cross button on ds4
     b0 = joystick.get_button(0)
+    #b1 is for circle button on ds4
     b1 = joystick.get_button(1)
+    #b2 is for triangle button on ds4
     b2 = joystick.get_button(2)
+    #b3 is for square button on ds4
     b3 = joystick.get_button(3)
     player.velocity[0] = 600 * dt * (ax - bx)
     player.velocity[1] = 600 * dt * (ay - by)
@@ -190,50 +198,37 @@ while running:
     ast3.velocity[0] = -120 * dt * bx
     ast3.velocity[1] = -120 * dt * by
     
-    if pygame.sprite.collide_rect(player, css1):
-        live = False
-        pygame.mixer.music.stop()
-        csfx.play()
-        player = Player()
-        css1 = Css1()
-        css2 = Css2()
-        sat1 = Sat1()
-        goal = Goal()
-        ast1 = Ast1()
-        ast2 = Ast2()
-        ast3 = Ast3()
-    elif pygame.sprite.collide_rect(player, css2):
-        live = False
-        pygame.mixer.music.stop()
-        csfx.play()
-        player = Player()
-        css1 = Css1()
-        css2 = Css2()
-        sat1 = Sat1()
-        goal = Goal()
-        ast1 = Ast1()
-        ast2 = Ast2()
-        ast3 = Ast3()
-    elif pygame.sprite.collide_rect(player, sat1):
-        live = False
-        pygame.mixer.music.stop()
-        csfx.play()
-        player = Player()
-        css1 = Css1()
-        css2 = Css2()
-        sat1 = Sat1()
-        goal = Goal()
-        ast1 = Ast1()
-        ast2 = Ast2()
-        ast3 = Ast3()
+    if live:
+        if pygame.sprite.collide_rect(player, css1):
+            live = False
+            pygame.mixer.music.stop()
+            csfx.play()
+            player = Player()
+        elif pygame.sprite.collide_rect(player, css2):
+            live = False
+            pygame.mixer.music.stop()
+            csfx.play()
+        elif pygame.sprite.collide_rect(player, sat1):
+            live = False
+            pygame.mixer.music.stop()
+            csfx.play()
+        elif pygame.sprite.collide_rect(player, goal):
+            live = False
+            pygame.mixer.music.stop()
+            lcfx.play()
     if b0:
+        #this stop music playback
         pygame.mixer.music.stop()
     elif b1:
+        #this start music playback
         pygame.mixer.music.play(-1)
     elif b2:
+        #this trigger spaceship crash event
         live = False
         pygame.mixer.music.stop()
         csfx.play()
+    elif b3:
+        #this restart the game
         player = Player()
         css1 = Css1()
         css2 = Css2()
@@ -242,7 +237,6 @@ while running:
         ast1 = Ast1()
         ast2 = Ast2()
         ast3 = Ast3()
-    elif b3:
         live = True
         pygame.mixer.music.play(-1)
     player.update()
