@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((1024, 600))
 pygame.display.set_caption('Space - Virtualx Game Engine')
 font = pygame.font.Font(None, 30)
 clock = pygame.time.Clock()
-FPS = 60
+FPS = 6000
 BLACK = (0, 0, 0)
 #WHITE = (255, 255, 255)
 pygame.mixer.music.load('space.ogg')
@@ -30,6 +30,22 @@ class Background(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load('galaxy.png')
+        #self.image = pygame.Surface((32, 32))
+        #self.image.fill(WHITE)
+        self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
+        self.velocity = [0, 0]
+class Supernova(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load('supernova.png')
+        #self.image = pygame.Surface((32, 32))
+        #self.image.fill(WHITE)
+        self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
+        self.velocity = [0, 0]
+class Antenna(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load('antenna.png')
         #self.image = pygame.Surface((32, 32))
         #self.image.fill(WHITE)
         self.rect = self.image.get_rect()  # Get rect of some size as 'image'.
@@ -155,14 +171,17 @@ ast1 = Ast1()
 ast2 = Ast2()
 ast3 = Ast3()
 background = Background()
+supernova = Supernova()
+antenna = Antenna()
 running = True
 live = True
+complete = False
 #rect = pygame.Rect((0, 0), (32, 32))
 #image = pygame.Surface((32, 32))
 #image.fill(WHITE)
 while running:
     dt = clock.tick(FPS) / 1000
-    screen.fill(BLACK)
+    #screen.fill(BLACK)
     datetime.datetime.now()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -184,19 +203,20 @@ while running:
     b2 = joystick.get_button(2)
     #b3 is for square button on ds4
     b3 = joystick.get_button(3)
-    player.velocity[0] = 600 * dt * (ax - bx)
-    player.velocity[1] = 600 * dt * (ay - by)
-    css1.velocity[0] = -600 * dt * bx
-    css1.velocity[1] = -600 * dt * by
-    css2.velocity = css1.velocity
-    sat1.velocity = css1.velocity
-    goal.velocity = css1.velocity
-    ast1.velocity[0] = -200 * dt * bx
-    ast1.velocity[1] = -200 * dt * by
-    ast2.velocity[0] = -150 * dt * bx
-    ast2.velocity[1] = -150 * dt * by
-    ast3.velocity[0] = -120 * dt * bx
-    ast3.velocity[1] = -120 * dt * by
+    if live:
+        player.velocity[0] = 600 * dt * (ax - bx)
+        player.velocity[1] = 600 * dt * (ay - by)
+        css1.velocity[0] = -600 * dt * bx
+        css1.velocity[1] = -600 * dt * by
+        css2.velocity = css1.velocity
+        sat1.velocity = css1.velocity
+        goal.velocity = css1.velocity
+        ast1.velocity[0] = -200 * dt * bx
+        ast1.velocity[1] = -200 * dt * by
+        ast2.velocity[0] = -150 * dt * bx
+        ast2.velocity[1] = -150 * dt * by
+        ast3.velocity[0] = -120 * dt * bx
+        ast3.velocity[1] = -120 * dt * by
     
     if live:
         if pygame.sprite.collide_rect(player, css1):
@@ -214,6 +234,7 @@ while running:
             csfx.play()
         elif pygame.sprite.collide_rect(player, goal):
             live = False
+            complete = True
             pygame.mixer.music.stop()
             lcfx.play()
     if b0:
@@ -238,6 +259,7 @@ while running:
         ast2 = Ast2()
         ast3 = Ast3()
         live = True
+        complete = False
         pygame.mixer.music.play(-1)
     player.update()
     css1.update()
@@ -248,8 +270,8 @@ while running:
     ast2.update()
     ast3.update()
 
-    screen.blit(background.image, background.rect)
     if live:
+        screen.blit(background.image, background.rect)
         screen.blit(ast3.image, ast3.rect)
         screen.blit(ast1.image, ast2.rect)
         screen.blit(ast1.image, ast1.rect)
@@ -258,6 +280,10 @@ while running:
         screen.blit(css2.image, css2.rect)
         screen.blit(sat1.image, sat1.rect)
         screen.blit(goal.image, goal.rect)
+    elif complete:
+        screen.blit(antenna.image, antenna.rect)
+    else:
+        screen.blit(supernova.image, supernova.rect)
     rfps = font.render(str(int(clock.get_fps())), True, pygame.Color('white'))
     sysclock = font.render(str(datetime.datetime.utcnow()), True, pygame.Color('white'))
     cpuarch = font.render(str(platform.machine()), True, pygame.Color('white'))
